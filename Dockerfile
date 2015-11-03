@@ -1,7 +1,6 @@
 FROM gocd/gocd-agent:latest
 
 # Set correct environment variables.
-ENV HOME /root
 ENV RUBY_VERSION 2.2.3
 
 # ===================
@@ -22,14 +21,17 @@ RUN apt-get install -y nodejs
 # Install ruby
 # =============
 
+USER go
+ENV GO_HOME /var/go
+
 # Install rbenv
-RUN git clone https://github.com/sstephenson/rbenv.git /root/.rbenv
-RUN git clone https://github.com/sstephenson/ruby-build.git /root/.rbenv/plugins/ruby-build
-ENV PATH /root/.rbenv/bin:/root/.rbenv/shims:$PATH
+RUN git clone https://github.com/sstephenson/rbenv.git $GO_HOME/.rbenv
+RUN git clone https://github.com/sstephenson/ruby-build.git $GO_HOME/.rbenv/plugins/ruby-build
+ENV PATH $GO_HOME/.rbenv/bin:$GO_HOME/.rbenv/shims:$PATH
 
 # Update rbenv and ruby-build definitions
-RUN bash -c 'cd /root/.rbenv/ && git pull'
-RUN bash -c 'cd /root/.rbenv/plugins/ruby-build/ && git pull'
+RUN bash -c 'cd $GO_HOME/.rbenv/ && git pull'
+RUN bash -c 'cd $GO_HOME/.rbenv/plugins/ruby-build/ && git pull'
 
 # Install ruby and gems
 RUN rbenv install $RUBY_VERSION
@@ -43,4 +45,5 @@ RUN rbenv rehash
 # =======================
 # Clean up APT when done.
 # =======================
+USER root
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
