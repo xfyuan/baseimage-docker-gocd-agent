@@ -29,7 +29,6 @@ RUN /bin/bash -l -c "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
 RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
 
 RUN ruby -v
-
 # =======================
 # Clean up APT when done.
 # =======================
