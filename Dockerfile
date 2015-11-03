@@ -27,8 +27,9 @@ RUN /bin/bash -l -c "source /etc/profile.d/rvm.sh"
 RUN /bin/bash -l -c "rvm install $RUBY_VERSION"
 RUN /bin/bash -l -c "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
 RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
+RUN /bin/bash -l -c "rvm use $RUBY_VERSION --default"
+RUN /bin/bash -l -c "ruby -v"
 
-RUN ruby -v
 # =======================
 # Clean up APT when done.
 # =======================
