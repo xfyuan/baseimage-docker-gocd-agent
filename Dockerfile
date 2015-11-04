@@ -29,13 +29,21 @@ USER go
 ENV HOME /var/go
 WORKDIR $HOME
 
-# rvm
-RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3; \curl -sSL https://get.rvm.io | bash -s stable
-RUN /bin/bash -l -c "echo 'source $HOME/.rvm/scripts/rvm' >> ~/.bash_profile"
-RUN /bin/bash -l -c "source $HOME/.rvm/scripts/rvm"
-RUN /bin/bash -l -c "rvm install $RUBY_VERSION"
-RUN /bin/bash -l -c "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
-RUN /bin/bash -l -c "rvm use $RUBY_VERSION --default"
-RUN /bin/bash -l -c "ruby -v"
+# Install rbenv
+RUN git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
+RUN git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
+ENV PATH ~/.rbenv/bin:~/.rbenv/shims:$PATH
 
+# Update rbenv and ruby-build definitions
+RUN bash -c 'cd ~/.rbenv/ && git pull'
+RUN bash -c 'cd ~/.rbenv/plugins/ruby-build/ && git pull'
+
+# Install ruby and gems
+RUN rbenv install $RUBY_VERSION
+RUN rbenv global $RUBY_VERSION
+
+RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
+
+RUN gem install bundler --no-ri --no-rdoc
+RUN rbenv rehash
+RUN ruby -v
