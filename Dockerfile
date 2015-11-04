@@ -35,15 +35,15 @@ RUN git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/rub
 ENV PATH ~/.rbenv/bin:~/.rbenv/shims:$PATH
 
 # Update rbenv and ruby-build definitions
-RUN bash -c 'cd ~/.rbenv/ && git pull'
-RUN bash -c 'cd ~/.rbenv/plugins/ruby-build/ && git pull'
+RUN bash -c "cd ~/.rbenv/ && git pull"
+RUN bash -c "cd ~/.rbenv/plugins/ruby-build/ && git pull"
 
 # Install ruby and gems
-RUN rbenv install $RUBY_VERSION
-RUN rbenv global $RUBY_VERSION
+RUN bash -c "rbenv install $RUBY_VERSION"
+RUN bash -c "rbenv global $RUBY_VERSION"
 
 RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
 
-RUN gem install bundler --no-ri --no-rdoc
-RUN rbenv rehash
-RUN ruby -v
+RUN bash -c "gem install bundler --no-ri --no-rdoc"
+RUN bash -c "rbenv rehash"
+RUN bash -c "ruby -v"
