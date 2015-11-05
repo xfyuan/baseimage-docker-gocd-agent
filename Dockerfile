@@ -15,11 +15,6 @@ RUN apt-get -qq update && apt-get -y install build-essential \
   # for js runtime
   nodejs
 
-# =======================
-# Clean up APT when done.
-# =======================
-RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-
 # =============
 # Install ruby
 # =============
@@ -47,3 +42,14 @@ RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
 RUN bash -c "gem install bundler --no-ri --no-rdoc"
 RUN bash -c "rbenv rehash"
 RUN bash -c "ruby -v"
+
+# =======================
+# Clean up APT when done.
+# =======================
+
+# switch to user go
+USER root
+ENV HOME /root
+
+RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
