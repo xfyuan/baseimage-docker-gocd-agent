@@ -19,41 +19,19 @@ RUN apt-get -qq update && apt-get -y install build-essential \
 # Install ruby
 # =============
 
-# switch to user go
-USER go
-ENV HOME /var/go
-WORKDIR $HOME
-
-# Install rbenv
-RUN git clone https://github.com/sstephenson/rbenv.git ~/.rbenv
-RUN git clone https://github.com/sstephenson/ruby-build.git ~/.rbenv/plugins/ruby-build
-ENV PATH ~/.rbenv/bin:~/.rbenv/shims:$PATH
-
-# Update rbenv and ruby-build definitions
-RUN bash -c "cd ~/.rbenv/ && git pull"
-RUN bash -c "cd ~/.rbenv/plugins/ruby-build/ && git pull"
-
-# Install ruby and gems
-RUN bash -c "rbenv install $RUBY_VERSION"
-RUN bash -c "rbenv global $RUBY_VERSION"
-
-RUN echo 'gem: --no-rdoc --no-ri' >> ~/.gemrc
-
+# rvm
+RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3; \curl -sSL https://get.rvm.io | sudo bash -s stable
+ONBUILD RUN bash -c "source /etc/profile.d/rvm.sh"
+RUN bash -c "rvm install $RUBY_VERSION"
+RUN bash -c "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
+RUN bash -c "echo 'gem: --no-ri --no-rdoc' > /var/go/.gemrc"
 RUN bash -c "gem install bundler --no-ri --no-rdoc"
-RUN bash -c "rbenv rehash"
+RUN bash -c "rvm use $RUBY_VERSION --default"
 RUN bash -c "ruby -v"
-
-RUN echo 'export PATH="$PATH"' >> ~/.bash_profile
-RUN echo "eval \"\$(rbenv init -)\"" >> ~/.bash_profile
 
 # =======================
 # Clean up APT when done.
 # =======================
 
-# switch to user go
-USER root
-ENV HOME /root
-
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
-ENTRYPOINT ["su", "go", "-c", "source", "~/.bash_profile"]
