@@ -43,6 +43,9 @@ RUN bash -c "gem install bundler --no-ri --no-rdoc"
 RUN bash -c "rbenv rehash"
 RUN bash -c "ruby -v"
 
+RUN bash -c "echo 'export PATH=\"~/.rbenv/bin:$PATH\"' >> ~/.bash_profile"
+RUN bash -c "echo 'eval \"$(rbenv init -)\"' >> ~/.bash_profile"
+
 # =======================
 # Clean up APT when done.
 # =======================
