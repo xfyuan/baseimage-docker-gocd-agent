@@ -23,8 +23,9 @@ RUN apt-get -qq update && apt-get -y install build-essential \
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3; \curl -sSL https://get.rvm.io | sudo bash -s stable
 ONBUILD RUN bash -l -c "source /etc/profile.d/rvm.sh"
 RUN /bin/bash -l -c "rvm install $RUBY_VERSION"
-RUN /bin/bash -l -c "echo 'gem: --no-ri --no-rdoc' > ~/.gemrc"
-RUN /bin/bash -l -c "gem install bundler --no-ri --no-rdoc"
+RUN /bin/bash -l -c "echo 'gem: --no-document' > ~/.gemrc"
+RUN /bin/bash -l -c "echo 'gem: --no-document' > /var/go/.gemrc"
+RUN /bin/bash -l -c "gem install bundler --no-document"
 RUN /bin/bash -l -c "rvm use $RUBY_VERSION --default"
 RUN /bin/bash -l -c "ruby -v"
 
