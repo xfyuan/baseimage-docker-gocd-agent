@@ -10,7 +10,7 @@ ENV RUBY_VERSION 2.2.3
 RUN apt-get -qq update && apt-get install --no-install-recommends -y -qq \
   curl git openssh-client unzip ruby ca-certificates patch gawk g++ gcc make \
   libc6-dev patch libsqlite3-dev sqlite3 autoconf libgdbm-dev libncurses5-dev \
-  automake libtool bison pkg-config libffi-dev libgmp3-dev
+  automake libtool bison pkg-config libffi-dev libgmp3-dev \
   build-essential libssl-dev libreadline6-dev libpq-dev libyaml-dev zlib1g-dev \
   libxml2-dev libxslt1-dev libqt4-webkit libqt4-dev xvfb nodejs
 
