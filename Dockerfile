@@ -26,7 +26,7 @@ WORKDIR $HOME
 
 # rvm
 RUN gpg --keyserver hkp://keys.gnupg.net --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3; \curl -sSL https://get.rvm.io | bash -s stable
-RUN bash -l -c "source /etc/profile.d/rvm.sh"
+RUN bash -l -c "source ~/.bash_profile"
 RUN bash -l -c "rvm install $RUBY_VERSION"
 RUN bash -l -c "echo 'gem: --no-document' > ~/.gemrc"
 RUN bash -l -c "gem install bundler --no-document"
